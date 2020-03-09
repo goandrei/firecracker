@@ -44,11 +44,13 @@ class SSHConnection:
         exit_code, stdout, stderr = self._exec(cmd_string)
         return exit_code, BytesIO(stdout), BytesIO(stderr)
 
-    def scp_file(self, local_path, remote_path):
+    def scp_file(self, local_path, remote_path, recursive=False):
         """Copy a files to the VM using scp."""
         cmd = ('scp -o StrictHostKeyChecking=no'
                ' -o UserKnownHostsFile=/dev/null'
+               ' {}'
                ' -i {} {} {}@{}:{}').format(
+            '-r' if recursive is True else '',
             self.ssh_config['ssh_key_path'],
             local_path,
             self.ssh_config['username'],

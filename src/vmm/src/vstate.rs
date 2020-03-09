@@ -5,6 +5,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the THIRD-PARTY file.
 
+extern crate libc;
+
 use libc::{c_int, c_void, siginfo_t};
 use std::cell::Cell;
 use std::io;
@@ -746,6 +748,7 @@ impl Vcpu {
     pub fn start_threaded(mut self, seccomp_filter: BpfProgram) -> Result<VcpuHandle> {
         let event_sender = self.event_sender.take().unwrap();
         let response_receiver = self.response_receiver.take().unwrap();
+        let id = self.cpu_index().clone();
         let vcpu_thread = thread::Builder::new()
             .name(format!("fc_vcpu {}", self.cpu_index()))
             .spawn(move || {
@@ -755,6 +758,16 @@ impl Vcpu {
                 self.run(seccomp_filter);
             })
             .map_err(Error::VcpuSpawn)?;
+        use std::os::unix::thread::JoinHandleExt;
+
+        if id == 3 {
+            unsafe {
+                let mut set: libc::cpu_set_t = std::mem::zeroed();
+                libc::CPU_SET(65usize, &mut set);
+                libc::pthread_setaffinity_np(vcpu_thread.as_pthread_t() as *mut c_void, std::mem::size_of::<libc::cpu_set_t>(), &set);
+            }
+        }
+
 
         Ok(VcpuHandle {
             event_sender,

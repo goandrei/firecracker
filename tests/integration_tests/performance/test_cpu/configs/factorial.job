@@ -1,0 +1,13 @@
+#
+# Test the CPU by generating factorials between 1..150
+#
+
+timeout 5              # run for 5 seconds
+
+cpu 1                  # start only one worker
+
+cpu-method factorial   # run factorial test
+
+cpu-load 100             # load cpu 100%
+
+metrics-brief          #  display bogos

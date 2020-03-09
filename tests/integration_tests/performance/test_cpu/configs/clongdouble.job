@@ -1,0 +1,13 @@
+#
+# Test the CPU using 1000 iterations of a mix of long double floating point complex operations
+#
+
+timeout 5                # run for 5 seconds
+
+cpu 1                    # start only one worker
+
+cpu-method clongdouble   # run clongdouble test
+
+cpu-load 100             # load cpu 100%
+
+metrics-brief            #  display bogos

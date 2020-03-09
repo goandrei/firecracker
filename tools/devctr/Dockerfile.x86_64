@@ -47,6 +47,7 @@ RUN apt-get update \
         python3-venv    \
         zlib1g-dev \
         screen \
+        stress-ng \
     && python3 -m pip install \
         setuptools \
         wheel \

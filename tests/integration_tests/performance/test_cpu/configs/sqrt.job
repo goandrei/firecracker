@@ -1,0 +1,13 @@
+#
+# Test the CPU by computing sqrt(rand())
+#
+
+timeout 5         # run for 5 seconds
+
+cpu 1             # start only one worker
+
+cpu-method sqrt   # run one test per CPU
+
+cpu-load 100             # load cpu 100%
+
+metrics-brief     #  display bogos

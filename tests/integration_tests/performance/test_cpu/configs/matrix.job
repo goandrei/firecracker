@@ -1,0 +1,15 @@
+#
+# Test the CPU using matrix product of two 128 × 128 matrices of double floats
+#
+
+run sequential
+
+timeout 5                # run for 5 seconds
+
+cpu 1                    # start only one worker
+
+cpu-method matrixprod    # run matrixprod test
+
+cpu-load 100             # load cpu 100%
+
+metrics-brief            #  display bogos
